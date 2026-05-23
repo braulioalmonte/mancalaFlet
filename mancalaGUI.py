@@ -5,7 +5,7 @@ import random
 #TODO 2: Add animations for played spaces
 #TODO 3: Finish play again mechanic [DONE]
 #TODO 4: Add winning conditions 
-#TODO 5: check empty spaces to finish game [Not Done]
+#TODO 5: Check empty spaces to finish game [DONE]
 #TODO 6: ??? -> Profit
 #TODO 7: Add option to change background
 #TODO 8: Add capture mechanic [DONE]
@@ -118,17 +118,17 @@ def main(page: ft.Page):
         
         if checkp1:
             p2Space.data[1]+=sum(b.data[1] for b in p2Buttons)
-            p2Space.content.value = f"{p2Space.data}"
+            p2Space.content.value = f"{p2Space.data[1]}"
             for b in p2Buttons:
                 b.data[1] = 0
-                b.value = ft.Text(f"{b.data[1]}")
+                b.content.value = f"{b.data[1]}"
             finishGame()
         elif checkp2:
             p1Space.data[1]+=sum(b.data[1] for b in p1Buttons)
-            p1Space.content.value = f"{p1Space.data}"
+            p1Space.content.value = f"{p1Space.data[1]}"
             for b in p1Buttons:
                 b.data[1] = 0
-                b.value = ft.Text(f"{b.data[1]}")
+                b.content.value = f"{b.data[1]}"
             finishGame()
 
     def finishGame():
@@ -154,18 +154,18 @@ def main(page: ft.Page):
 
     p1Buttons = [ft.Button(width=100, 
                            height=100, 
-                           content=ft.Text(value="3", 
+                           content=ft.Text(value="1", 
                                            size=20), 
-                            data = [i,3], 
+                            data = [i,1], 
                             color=ft.Colors.BLUE,
                             on_click=transferPoints)
                             for i in range(12,6,-1)]
     
     p2Buttons = [ft.Button(width=100, 
                            height=100, 
-                           content=ft.Text(value="3", 
+                           content=ft.Text(value="1", 
                                            size=20), 
-                            data = [i,3], 
+                            data = [i,1], 
                             color=ft.Colors.RED,
                             on_click=transferPoints) 
                             for i in range(0,6)]
