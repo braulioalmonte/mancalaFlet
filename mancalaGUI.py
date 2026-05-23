@@ -5,12 +5,15 @@ import random
 #TODO 2: Add animations for played spaces
 #TODO 3: Finish play again mechanic [DONE]
 #TODO 4: Add winning conditions 
-#TODO 5: check empty spaces to finish game [DONE]
+#TODO 5: check empty spaces to finish game [Not Done]
 #TODO 6: ??? -> Profit
 #TODO 7: Add option to change background
 #TODO 8: Add capture mechanic [DONE]
 
 #! There is a bug regarding the p1buttons, p2buttons lists and the turn logic, i'll fix it later
+#! Bug Fixed
+
+#! There is a bug with capture mechanic, playing a 2 spaces before the score space is skipping and adding the points
 #! Bug Fixed
 
 def main(page: ft.Page):
@@ -48,33 +51,35 @@ def main(page: ft.Page):
 
     def checkCapture(position, turn):
 
-        #! PENDING TESTING
-        if turn == 0:
-            if  12 >= position >= 7:
-                if orderList[12-position].data[1] != 0 and orderList[position].data[1] == 1:
-                    #add captured beads and display new amount
-                    p1Space.data[1] += orderList[12-position].data[1] + 1
-                    p1Space.content.value = f"{p1Space.data[1]}"
+        if orderList[12-position].data[1] != 0:
+            if turn == 0:
+                if  12 >= position >= 7:
+                    if orderList[position].data[1] == 1:
+                        print(f"Capture: {12-position}")
+                        #add captured beads and display new amount
+                        p1Space.data[1] += orderList[12-position].data[1] + 1
+                        p1Space.content.value = f"{p1Space.data[1]}"
 
-                    #reset the capturing and captured space
-                    orderList[12-position].data[1] = 0
-                    orderList[12-position].content.value = f"{0}"
+                        #reset the capturing and captured space
+                        orderList[12-position].data[1] = 0
+                        orderList[12-position].content.value = f"{0}"
 
-                    orderList[position].data[1] = 0
-                    orderList[position].content.value = f"{0}"
-        elif turn == 1:
-            if  5 >= position >= 0:
-                if orderList[12-position].data[1] != 0 and orderList[position].data[1] == 1:
-                    #add captured beads and display new amount
-                    p2Space.data[1] += orderList[12-position].data[1] + 1
-                    p2Space.content.value = f"{p2Space.data[1]}"
+                        orderList[position].data[1] = 0
+                        orderList[position].content.value = f"{0}"
+            elif turn == 1:
+                if  5 >= position >= 0:
+                    if orderList[position].data[1] == 1:
+                        print(f"Capture: {12-position}")
+                        #add captured beads and display new amount
+                        p2Space.data[1] += orderList[12-position].data[1] + 1
+                        p2Space.content.value = f"{p2Space.data[1]}"
 
-                    #reset the capturing and captured space
-                    orderList[12-position].data[1] = 0
-                    orderList[12-position].content.value = f"{0}"
+                        #reset the capturing and captured space
+                        orderList[12-position].data[1] = 0
+                        orderList[12-position].content.value = f"{0}"
 
-                    orderList[position].data[1] = 0
-                    orderList[position].content.value = f"{0}"
+                        orderList[position].data[1] = 0
+                        orderList[position].content.value = f"{0}"
 
     def checkTurn(position):
         nonlocal turn
