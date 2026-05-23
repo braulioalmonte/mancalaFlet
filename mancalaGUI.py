@@ -1,13 +1,14 @@
 import flet as ft
 import random
-import time
 
 #TODO 1: Finish core gameplay [DONE]
 #TODO 2: Add animations for played spaces
-#TODO 3: Finish play again mechanic
-#TODO 4: Add winning conditions and check
-#TODO 5: ??? -> Profit
-#TODO 6: Add option to change background
+#TODO 3: Finish play again mechanic [DONE]
+#TODO 4: Add winning conditions 
+#TODO 5: check empty spaces to finish game [DONE]
+#TODO 6: ??? -> Profit
+#TODO 7: Add option to change background
+#TODO 8: Add capture mechanic [DONE]
 
 #! There is a bug regarding the p1buttons, p2buttons lists and the turn logic, i'll fix it later
 #! Bug Fixed
@@ -17,11 +18,11 @@ def main(page: ft.Page):
     turn = random.randint(0,1)
 
     #functions
-    def changeTurn():
-        nonlocal turn
-        disableButtons(turn)
 
-    def transferPoints(e):
+    def animateButton(button):
+        pass
+
+    def transferPoints(e: ft.Event[ft.Button]):
         nonlocal turn
         position = e.control.data[0]
         beads = e.control.data[1]
@@ -38,10 +39,46 @@ def main(page: ft.Page):
             print(position)
             orderList[position].data[1] += 1
             orderList[position].content.value = f"{orderList[position].data[1]}"
-            # time.sleep(0.1) #this doesn't work, might use on_animation_end of buttons to simulate a delay
         
         print(f"---{turn+1}---")
-        #play again
+        
+        checkCapture(position, turn)
+        checkTurn(position)
+        checkEmptyBoard()
+
+    def checkCapture(position, turn):
+
+        #! PENDING TESTING
+        if turn == 0:
+            if  12 >= position >= 7:
+                if orderList[12-position].data[1] != 0 and orderList[position].data[1] == 1:
+                    #add captured beads and display new amount
+                    p1Space.data[1] += orderList[12-position].data[1] + 1
+                    p1Space.content.value = f"{p1Space.data[1]}"
+
+                    #reset the capturing and captured space
+                    orderList[12-position].data[1] = 0
+                    orderList[12-position].content.value = f"{0}"
+
+                    orderList[position].data[1] = 0
+                    orderList[position].content.value = f"{0}"
+        elif turn == 1:
+            if  5 >= position >= 0:
+                if orderList[12-position].data[1] != 0 and orderList[position].data[1] == 1:
+                    #add captured beads and display new amount
+                    p2Space.data[1] += orderList[12-position].data[1] + 1
+                    p2Space.content.value = f"{p2Space.data[1]}"
+
+                    #reset the capturing and captured space
+                    orderList[12-position].data[1] = 0
+                    orderList[12-position].content.value = f"{0}"
+
+                    orderList[position].data[1] = 0
+                    orderList[position].content.value = f"{0}"
+
+    def checkTurn(position):
+        nonlocal turn
+        #play again or not
         if position == 13 and turn == 0:
             turn = 0
         elif position == 6 and turn == 1:
@@ -50,11 +87,10 @@ def main(page: ft.Page):
             turn = (turn+1) % 2
 
         turnText.value = f"Turn: Player {turn+1}"
-        
-        #here goes the turn change function for the buttons (disabling and stuff)
-        changeTurn()
 
-    def disableButtons(turn):
+        changeTurn(turn)
+
+    def changeTurn(turn):
         if turn == 0:
             #disable p2 buttons
             for button in p2Buttons:
@@ -71,6 +107,30 @@ def main(page: ft.Page):
             for button in p2Buttons:
                 button.disabled = False
 
+    def checkEmptyBoard():
+        checkp1 = all(b.data[1] == 0 for b in p1Buttons)
+        checkp2 = all(b.data[1] == 0 for b in p2Buttons)
+        
+        if checkp1:
+            p2Space.data[1]+=sum(b.data[1] for b in p2Buttons)
+            p2Space.content.value = f"{p2Space.data}"
+            for b in p2Buttons:
+                b.data[1] = 0
+                b.value = ft.Text(f"{b.data[1]}")
+            finishGame()
+        elif checkp2:
+            p1Space.data[1]+=sum(b.data[1] for b in p1Buttons)
+            p1Space.content.value = f"{p1Space.data}"
+            for b in p1Buttons:
+                b.data[1] = 0
+                b.value = ft.Text(f"{b.data[1]}")
+            finishGame()
+
+    def finishGame():
+        for b in orderList:
+            b.disabled = True
+        checkWin()
+
     def checkWin():
         pass
 
@@ -85,22 +145,22 @@ def main(page: ft.Page):
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
 
-    #control
+    #controls
 
     p1Buttons = [ft.Button(width=100, 
                            height=100, 
-                           content=ft.Text(value="4", 
+                           content=ft.Text(value="3", 
                                            size=20), 
-                            data = [i,4], 
+                            data = [i,3], 
                             color=ft.Colors.BLUE,
                             on_click=transferPoints)
                             for i in range(12,6,-1)]
     
     p2Buttons = [ft.Button(width=100, 
                            height=100, 
-                           content=ft.Text(value="4", 
+                           content=ft.Text(value="3", 
                                            size=20), 
-                            data = [i,4], 
+                            data = [i,3], 
                             color=ft.Colors.RED,
                             on_click=transferPoints) 
                             for i in range(0,6)]
@@ -132,7 +192,7 @@ def main(page: ft.Page):
     playerColumn = ft.Column(controls=[p1Row, p2Row])
     finalRow = ft.Row(controls=[p1Space, playerColumn, p2Space], alignment=ft.MainAxisAlignment.CENTER)
     turnText = ft.Text(value=f"Turn: Player {turn+1}")
-    disableButtons(turn)
+    changeTurn(turn)
     page.add(turnText, finalRow)
 
 ft.run(main=main, assets_dir="assets")
