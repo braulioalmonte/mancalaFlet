@@ -11,6 +11,7 @@ import random
 #TODO 8: Add capture mechanic [DONE]
 #TODO 9: Add an option to disable zero buttons
 #TODO 10: Add reset button and reset game function [DONE]
+#TODO 11: Add a settings view for TODO 9 and TODO 7
 
 #! There is a bug regarding the p1buttons, p2buttons lists and the turn logic, i'll fix it later
 #! Bug Fixed
@@ -50,6 +51,7 @@ def main(page: ft.Page):
         checkCapture(position, turn)
         checkTurn(position)
         checkEmptyBoard()
+        disableZeroes(turn)
 
     def checkCapture(position, turn):
 
@@ -164,6 +166,19 @@ def main(page: ft.Page):
             b.content.value = f"{b.data[1]}"
         changeTurn(turn)
 
+    def disableZeroes(turn):
+        lower = upper = 0
+        if turn == 0:
+            lower,upper = 7,13
+        elif turn == 1:
+            lower,upper = 0,6
+        
+        for b in orderList[lower:upper]:
+            if b.data[1] == 0:
+                b.disabled = True
+            else:
+                b.disabled = False
+        
     #debug
 
     def printPosition(e):
