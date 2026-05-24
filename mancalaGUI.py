@@ -151,7 +151,18 @@ def main(page: ft.Page):
             stateText.value = "Player 2 Wins"
         else:
             stateText.value = "Tie"
-        stateText.visible = "True"
+        stateText.visible = True
+
+    def resetGame(e):
+        nonlocal turn
+        for b in orderList:
+            if b.data[0] not in [6,13]:
+                b.data[1] = 4
+            else:
+                b.data[1] = 0
+            
+            b.content.value = f"{b.data[1]}"
+        changeTurn(turn)
 
     #debug
 
@@ -212,7 +223,8 @@ def main(page: ft.Page):
     finalRow = ft.Row(controls=[p1Space, playerColumn, p2Space], alignment=ft.MainAxisAlignment.CENTER)
     turnText = ft.Text(value=f"Turn: Player {turn+1}")
     stateText = ft.Text("Capture!", visible=False) #<- Display capture message using the result in checkCapture()
+    resetButton = ft.Button("Reset", on_click=resetGame)
     changeTurn(turn)
-    page.add(stateText, turnText, finalRow)
+    page.add(stateText, turnText, resetButton, finalRow)
 
 ft.run(main=main, assets_dir="assets")
