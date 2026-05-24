@@ -4,11 +4,13 @@ import random
 #TODO 1: Finish core gameplay [DONE]
 #TODO 2: Add animations for played spaces
 #TODO 3: Finish play again mechanic [DONE]
-#TODO 4: Add winning conditions 
+#TODO 4: Add winning conditions [DONE]
 #TODO 5: Check empty spaces to finish game [DONE]
 #TODO 6: ??? -> Profit
 #TODO 7: Add option to change background
 #TODO 8: Add capture mechanic [DONE]
+#TODO 9: Add an option to disable zero buttons
+#TODO 10: Add reset button and reset game function
 
 #! There is a bug regarding the p1buttons, p2buttons lists and the turn logic, i'll fix it later
 #! Bug Fixed
@@ -66,6 +68,8 @@ def main(page: ft.Page):
 
                         orderList[position].data[1] = 0
                         orderList[position].content.value = f"{0}"
+
+                        stateText.visible = True
             elif turn == 1:
                 if  5 >= position >= 0:
                     if orderList[position].data[1] == 1:
@@ -80,6 +84,10 @@ def main(page: ft.Page):
 
                         orderList[position].data[1] = 0
                         orderList[position].content.value = f"{0}"
+
+                        stateText.visible = True
+        else:
+            stateText.visible = False
 
     def checkTurn(position):
         nonlocal turn
@@ -137,7 +145,13 @@ def main(page: ft.Page):
         checkWin()
 
     def checkWin():
-        pass
+        if p1Space.data[1] > p2Space.data[1]:
+            stateText.value = "Player 1 Wins"
+        elif p2Space.data[1] > p1Space.data[1]:
+            stateText.value = "Player 2 Wins"
+        else:
+            stateText.value = "Tie"
+        stateText.visible = "True"
 
     #debug
 
@@ -154,18 +168,18 @@ def main(page: ft.Page):
 
     p1Buttons = [ft.Button(width=100, 
                            height=100, 
-                           content=ft.Text(value="1", 
+                           content=ft.Text(value="4", 
                                            size=20), 
-                            data = [i,1], 
+                            data = [i,4], 
                             color=ft.Colors.BLUE,
                             on_click=transferPoints)
                             for i in range(12,6,-1)]
     
     p2Buttons = [ft.Button(width=100, 
                            height=100, 
-                           content=ft.Text(value="1", 
+                           content=ft.Text(value="4", 
                                            size=20), 
-                            data = [i,1], 
+                            data = [i,4], 
                             color=ft.Colors.RED,
                             on_click=transferPoints) 
                             for i in range(0,6)]
@@ -197,7 +211,8 @@ def main(page: ft.Page):
     playerColumn = ft.Column(controls=[p1Row, p2Row])
     finalRow = ft.Row(controls=[p1Space, playerColumn, p2Space], alignment=ft.MainAxisAlignment.CENTER)
     turnText = ft.Text(value=f"Turn: Player {turn+1}")
+    stateText = ft.Text("Capture!", visible=False) #<- Display capture message using the result in checkCapture()
     changeTurn(turn)
-    page.add(turnText, finalRow)
+    page.add(stateText, turnText, finalRow)
 
 ft.run(main=main, assets_dir="assets")
