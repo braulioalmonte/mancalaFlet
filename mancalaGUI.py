@@ -10,7 +10,7 @@ import random
 #TODO 7: Add option to change background
 #TODO 8: Add capture mechanic [DONE]
 #TODO 9: Add an option to disable zero buttons
-#TODO 10: Add reset button and reset game function
+#TODO 10: Add reset button and reset game function [DONE]
 
 #! There is a bug regarding the p1buttons, p2buttons lists and the turn logic, i'll fix it later
 #! Bug Fixed
