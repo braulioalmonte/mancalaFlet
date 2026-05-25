@@ -1,5 +1,6 @@
 import flet as ft
 import random
+import asyncio
 
 #TODO 1: Finish core gameplay [DONE]
 #TODO 2: Add animations for played spaces
@@ -226,7 +227,14 @@ def main(page: ft.Page):
     turnText = ft.Text(value=f"Turn: Player {turn+1}")
     stateText = ft.Text("Capture!", visible=False) #<- Display capture message using the result in checkCapture()
     resetButton = ft.Button("Reset", on_click=resetGame)
+    mainColumn = ft.Column(controls=[stateText, 
+                                     turnText, 
+                                     resetButton, 
+                                     finalRow], 
+                            alignment=ft.MainAxisAlignment.CENTER,
+                            horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+    mainArea = ft.SafeArea(expand=True, content=mainColumn)
     changeTurn(turn)
-    page.add(stateText, turnText, resetButton, finalRow)
+    page.add(mainArea)
 
 ft.run(main=main, assets_dir="assets")
