@@ -1,6 +1,5 @@
 import flet as ft
 import random
-import asyncio
 
 #TODO 1: Finish core gameplay [DONE]
 #TODO 2: Add animations for played spaces
@@ -8,7 +7,7 @@ import asyncio
 #TODO 4: Add winning conditions [DONE]
 #TODO 5: Check empty spaces to finish game [DONE]
 #TODO 6: ??? -> Profit
-#TODO 7: Add option to change background
+#TODO 7: Add option to change background [Halfly Done]
 #TODO 8: Add capture mechanic [DONE]
 #TODO 9: Add an option to disable zero buttons
 #TODO 10: Add reset button and reset game function [DONE]
@@ -19,6 +18,13 @@ def main(page: ft.Page):
     turn = random.randint(0,1)
 
     #functions
+
+    def changeBackground(e:ft.Event[ft.Dropdown]):
+        if e.control.value != "None":
+            page.decoration = ft.BoxDecoration(image=ft.DecorationImage(src=e.control.value, fit=ft.BoxFit.FILL))
+            page.bgcolor = ft.Colors.TRANSPARENT #<- Gotta make bgcolor transparent for background images to work
+        else:
+            page.bgcolor = ft.Colors.WHITE
 
     def animateButton(button):
         pass
@@ -177,6 +183,7 @@ def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.LIGHT
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+    page.bgcolor = ft.Colors.WHITE
 
     #controls
 
@@ -215,6 +222,16 @@ def main(page: ft.Page):
                         width=100, 
                         height=200, 
                         disabled=True)
+    
+    backgroundDropdown = ft.Dropdown(options=[ft.DropdownOption(key="None", text="No BG"),
+                                              ft.DropdownOption(key="images/bg1.jpg", text="Background 1"),
+                                              ft.DropdownOption(key="images/bg2.jpg", text="Background 2")
+                                              ],
+                                    on_select=changeBackground,
+                                    bgcolor=ft.Colors.WHITE,
+                                    fill_color=ft.Colors.WHITE,
+                                    text="Change Background",
+                                    width=250)
 
     p1Buttons = sorted(p1Buttons, key=lambda e: e.data[0])
     orderList = p2Buttons + [p2Space] + p1Buttons + [p1Space]
@@ -235,6 +252,6 @@ def main(page: ft.Page):
                             horizontal_alignment=ft.CrossAxisAlignment.CENTER)
     mainArea = ft.SafeArea(expand=True, content=mainColumn)
     changeTurn(turn)
-    page.add(mainArea)
+    page.add(backgroundDropdown, mainArea)
 
 ft.run(main=main, assets_dir="assets")
