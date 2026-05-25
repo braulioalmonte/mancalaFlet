@@ -9,7 +9,7 @@ import random
 #TODO 6: ??? -> Profit
 #TODO 7: Add option to change background [Halfly Done]
 #TODO 8: Add capture mechanic [DONE]
-#TODO 9: Add an option to disable zero buttons
+#TODO 9: Add an option to disable zero buttons [Halfy done]
 #TODO 10: Add reset button and reset game function [DONE]
 #TODO 11: Add a settings view for TODO 9 and TODO 7
 
