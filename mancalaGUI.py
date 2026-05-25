@@ -13,12 +13,6 @@ import random
 #TODO 10: Add reset button and reset game function [DONE]
 #TODO 11: Add a settings view for TODO 9 and TODO 7
 
-#! There is a bug regarding the p1buttons, p2buttons lists and the turn logic, i'll fix it later
-#! Bug Fixed
-
-#! There is a bug with capture mechanic, playing a 2 spaces before the score space is skipping and adding the points
-#! Bug Fixed
-
 def main(page: ft.Page):
     #variables
     turn = random.randint(0,1)
@@ -45,8 +39,6 @@ def main(page: ft.Page):
             print(position)
             orderList[position].data[1] += 1
             orderList[position].content.value = f"{orderList[position].data[1]}"
-        
-        print(f"---{turn+1}---")
         
         checkCapture(position, turn)
         checkTurn(position)
@@ -178,11 +170,6 @@ def main(page: ft.Page):
                 b.disabled = True
             else:
                 b.disabled = False
-        
-    #debug
-
-    def printPosition(e):
-        print(e.control.data[0])
 
     #page setup
     page.title = "Mancala"
