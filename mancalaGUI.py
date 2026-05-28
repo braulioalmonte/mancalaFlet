@@ -223,7 +223,7 @@ def main(page: ft.Page):
                         height=200, 
                         disabled=True)
     
-    backgroundDropdown = ft.Dropdown(options=[ft.DropdownOption(key="None", text="No BG"),
+    backgroundDropdown = ft.Container(bgcolor=ft.Colors.WHITE, content=ft.Dropdown(options=[ft.DropdownOption(key="None", text="No BG"),
                                               ft.DropdownOption(key="images/bg1.jpg", text="Background 1"),
                                               ft.DropdownOption(key="images/bg2.jpg", text="Background 2")
                                               ],
@@ -231,7 +231,7 @@ def main(page: ft.Page):
                                     bgcolor=ft.Colors.WHITE,
                                     fill_color=ft.Colors.WHITE,
                                     text="Change Background",
-                                    width=250)
+                                    width=250))
 
     p1Buttons = sorted(p1Buttons, key=lambda e: e.data[0])
     orderList = p2Buttons + [p2Space] + p1Buttons + [p1Space]
@@ -241,7 +241,7 @@ def main(page: ft.Page):
 
     playerColumn = ft.Column(controls=[p1Row, p2Row])
     finalRow = ft.Row(controls=[p1Space, playerColumn, p2Space], alignment=ft.MainAxisAlignment.CENTER)
-    turnText = ft.Text(value=f"Turn: Player {turn+1}")
+    turnText = ft.Text(value=f"Turn: Player {turn+1}", bgcolor=ft.Colors.WHITE)
     stateText = ft.Text("Capture!", visible=False) #<- Display capture message using the result in checkCapture()
     resetButton = ft.Button("Reset", on_click=resetGame)
     mainColumn = ft.Column(controls=[stateText, 
